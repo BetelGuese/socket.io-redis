@@ -49,8 +49,11 @@ function adapter(uri, opts){
   var prefix = opts.key || 'socket.io';
 
   // init clients if needed
-  if (!pub) pub = redis(port, host);
-  if (!sub) sub = redis(port, host, { return_buffers: true });
+  if (!pub) pub = socket ? redis(socket, opts) : redis(port, host, opts);
+  opts.detect_buffers = true
+  if (!sub) sub = socket
+    ? redis(socket, opts)
+    : redis(port, host, opts);
 
   // this server's key
   var uid = uid2(6);
